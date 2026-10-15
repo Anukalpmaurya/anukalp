@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0c0b18">
+  <title>HustleAI — AI Listing Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <a class="brand" href="#">
+        <span class="brand-icon">✳</span>
+        <span>Hustle<span class="accent">AI</span></span>
+      </a>
+
+      <p class="nav-label">WORKSPACE</p>
+      <button class="nav-item active" id="createNav">✦ &nbsp; Create listing</button>
+      <button class="nav-item" id="historyNav">◷ &nbsp; Saved listings</button>
+
+      <div class="sidebar-bottom">
+        <div class="local-badge">
+          <span class="status-dot"></span>
+          <div>
+            <strong>Local AI mode</strong>
+            <small id="connectionStatus">Checking connection...</small>
+          </div>
+        </div>
+        <p class="sidebar-note">Your creative sidekick for online selling.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <span class="eyebrow">YOUR AI CREATIVE STUDIO</span>
+          <h1 id="pageTitle">Make your product <span class="gradient-text">stand out.</span></h1>
+          <p class="subtitle" id="pageSubtitle">
+            Turn product details into marketing content in seconds.
+          </p>
+        </div>
+        <div class="avatar">H</div>
+      </header>
+
+      <section class="stats">
+        <div class="stat-card">
+          <span class="stat-icon">✦</span>
+          <div><strong id="totalCount">0</strong><small>Listings created</small></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">◉</span>
+          <div><strong>4</strong><small>Content formats</small></div>
+        </div>
+        <div class="stat-card">
+          <span class="stat-icon">⌂</span>
+          <div><strong>Local</strong><small>AI-first workflow</small></div>
+        </div>
+      </section>
+
+      <section id="createView" class="workspace">
+        <div class="panel form-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="step">STEP 01</span>
+              <h2>Tell us about your product</h2>
+              <p>The more detail you add, the more relevant the result.</p>
+            </div>
+            <span class="heading-icon">✎</span>
+          </div>
+
+          <form id="productForm">
+            <label for="productName">Product name <span>*</span></label>
+            <input id="productName" name="productName" required
+              placeholder="e.g. Handmade ceramic mug">
+
+            <div class="form-row">
+              <div>
+                <label for="category">Category</label>
+                <select id="category">
+                  <option>Home & Living</option>
+                  <option>Fashion</option>
+                  <option>Beauty & Skincare</option>
+                  <option>Electronics</option>
+                  <option>Food & Beverage</option>
+                  <option>Handmade Crafts</option>
+                  <option>Digital Products</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div>
+                <label for="price">Price (₹)</label>
+                <input id="price" type="number" min="0" placeholder="499">
+              </div>
+            </div>
+
+            <label for="features">Key features <span>*</span></label>
+            <textarea id="features" required rows="4"
+              placeholder="What makes it special? Materials, benefits, size, quality..."></textarea>
+
+            <label for="audience">Target audience</label>
+            <input id="audience" placeholder="e.g. Students, gift buyers, young professionals">
+
+            <label for="tone">Brand voice</label>
+            <div class="tone-options">
+              <label class="tone-option"><input type="radio" name="tone" value="Professional"> Professional</label>
+              <label class="tone-option"><input type="radio" name="tone" value="Friendly" checked> Friendly</label>
+              <label class="tone-option"><input type="radio" name="tone" value="Luxury"> Luxury</label>
+              <label class="tone-option"><input type="radio" name="tone" value="Playful"> Playful</label>
+            </div>
+
+            <label for="platform">Where will you sell?</label>
+            <select id="platform">
+              <option>Instagram</option>
+              <option>Amazon</option>
+              <option>Etsy</option>
+              <option>Shopify</option>
+              <option>WhatsApp Business</option>
+              <option>General online store</option>
+            </select>
+
+            <button type="submit" class="primary-btn" id="generateBtn">
+              <span>✦</span> Generate my listing <span class="btn-arrow">→</span>
+            </button>
+            <p class="form-footnote">✧ Powered by an open-weight model via Ollama</p>
+          </form>
+        </div>
+
+        <div class="panel result-panel">
+          <div class="panel-heading result-heading">
+            <div>
+              <span class="step">STEP 02</span>
+              <h2>Your content studio</h2>
+              <p>AI-crafted content, ready for your store.</p>
+            </div>
+            <span class="result-pill"><span class="status-dot"></span> AI OUTPUT</span>
+          </div>
+
+          <div id="emptyState" class="empty-state">
+            <div class="empty-art">
+              <span class="art-star star-one">✦</span>
+              <span class="art-star star-two">✧</span>
+              <div class="art-card">
+                <span>✳</span>
+                <div class="art-line long"></div>
+                <div class="art-line"></div>
+                <div class="art-line short"></div>
+              </div>
+            </div>
+            <h3>Your next great listing starts here.</h3>
+            <p>Fill in your product details and let your local AI model do the writing.</p>
+            <div class="empty-tags"><span>Descriptions</span><span>Captions</span><span>Hashtags</span></div>
+          </div>
+
+          <div id="loadingState" class="loading-state hidden">
+            <div class="spinner"></div>
+            <h3>Creating something great...</h3>
+            <p>Your AI model is writing your product content.</p>
+          </div>
+
+          <div id="results" class="results hidden">
+            <div class="result-meta">
+              <span class="result-category" id="resultCategory">PRODUCT LISTING</span>
+              <span id="resultTime"></span>
+            </div>
+
+            <article class="output-card">
+              <div class="output-title"><h3>Product title</h3><button data-copy="outTitle">Copy</button></div>
+              <p id="outTitle"></p>
+            </article>
+
+            <article class="output-card">
+              <div class="output-title"><h3>Product description</h3><button data-copy="outDescription">Copy</button></div>
+              <p id="outDescription"></p>
+            </article>
+
+            <article class="output-card">
+              <div class="output-title"><h3>Social caption</h3><button data-copy="outCaption">Copy</button></div>
+              <p id="outCaption"></p>
+            </article>
+
+            <article class="output-card">
+              <div class="output-title"><h3>Hashtags</h3><button data-copy="outHashtags">Copy</button></div>
+              <p class="hashtags" id="outHashtags"></p>
+            </article>
+
+            <article class="output-card">
+              <div class="output-title"><h3>Call to action</h3><button data-copy="outCta">Copy</button></div>
+              <p id="outCta"></p>
+            </article>
+
+            <div class="result-actions">
+              <button class="secondary-btn" id="saveBtn">♡ Save listing</button>
+              <button class="primary-btn compact" id="regenerateBtn">↻ Regenerate</button>
+            </div>
+            <p class="disclaimer">Review generated claims before publishing. AI can make mistakes.</p>
+          </div>
+          <p id="message" class="message" role="status"></p>
+        </div>
+      </section>
+
+      <section id="historyView" class="panel history-panel hidden">
+        <div class="panel-heading">
+          <div><span class="step">YOUR WORK</span><h2>Saved listings</h2><p>Revisit your previously generated product content.</p></div>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+
+      <footer>Made for independent sellers <span>✦</span> Built with open-source AI</footer>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
